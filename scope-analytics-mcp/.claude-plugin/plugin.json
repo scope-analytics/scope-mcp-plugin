@@ -1,8 +1,8 @@
 {
   "name": "scope-analytics-mcp",
   "displayName": "Scope Analytics",
-  "version": "0.1.5",
-  "description": "Install + query Scope — the AI analyst for AI products — from your coding agent.",
+  "version": "0.1.6",
+  "description": "Set up, install and query Scope — the AI analyst for AI products — from your coding agent. No key to paste.",
   "author": {
     "name": "Scope AI",
     "email": "info@scopeai.dev",
@@ -11,15 +11,13 @@
   "homepage": "https://scopeai.dev",
   "repository": "https://github.com/wally827/scope-mcp-plugin",
   "license": "MIT",
-  "keywords": ["analytics", "observability", "llm", "ai-analytics", "product-analytics", "mcp"],
-  "userConfig": {
-    "scope_api_key": {
-      "type": "string",
-      "title": "Scope API key",
-      "description": "Your Scope project SECRET key (sk_...), from your dashboard at https://scopeai.dev.",
-      "sensitive": true,
-      "required": true
-    }
-  },
+  "keywords": [
+    "analytics",
+    "observability",
+    "llm",
+    "ai-analytics",
+    "product-analytics",
+    "mcp"
+  ],
   "mcpServers": "./.mcp.json"
 }

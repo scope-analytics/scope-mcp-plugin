@@ -9,7 +9,7 @@
     {
       "name": "scope-analytics-mcp",
       "source": "./scope-analytics-mcp",
-      "description": "Install + query Scope — the AI analyst for AI products — from your coding agent."
+      "description": "Set up, install and query Scope — the AI analyst for AI products — from your coding agent. No key to paste."
     }
   ]
 }

@@ -2,9 +2,10 @@
   "mcpServers": {
     "scope": {
       "command": "uvx",
-      "args": ["scope-analytics-mcp"],
+      "args": [
+        "scope-analytics-mcp"
+      ],
       "env": {
-        "SCOPE_API_KEY": "${user_config.scope_api_key}",
         "SCOPE_API_BASE": "https://api.scopeai.dev"
       }
     }
