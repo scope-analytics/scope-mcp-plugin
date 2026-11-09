@@ -9,7 +9,7 @@
     "url": "https://scopeai.dev"
   },
   "homepage": "https://scopeai.dev",
-  "repository": "https://github.com/wally827/scope-mcp-plugin",
+  "repository": "https://github.com/scope-analytics/scope-mcp-plugin",
   "license": "MIT",
   "keywords": [
     "analytics",

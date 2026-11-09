@@ -11,7 +11,7 @@ server, fetched and run on demand via `uvx` (nothing to install first).
 ## Install
 
 ```text
-/plugin marketplace add wally827/scope-mcp-plugin
+/plugin marketplace add scope-analytics/scope-mcp-plugin
 /plugin install scope-analytics-mcp@scopeai
 ```
 
