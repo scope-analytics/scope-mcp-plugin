@@ -8,6 +8,10 @@ without leaving your editor.
 It bundles the [`scope-analytics-mcp`](https://pypi.org/project/scope-analytics-mcp/) MCP
 server, fetched and run on demand via `uvx` (nothing to install first).
 
+Once linked, Claude Code is also a member of the team in Scope: it has its own room that Scope
+remembers, and Scope can write to it — a finding, a question, or a **fix brief** (a problem Scope
+found in production, its evidence, the likely place in the code, and how Scope will check the fix).
+
 ## Install
 
 ```text
@@ -20,7 +24,26 @@ your browser, you sign in (or sign up), type the code Claude Code shows, pick or
 project, and approve. The link gets its own key — revocable in Scope's Setup → Keys — which Claude
 Code saves only to an env file git won't commit, and the plugin finds it there next time.
 
-> Requires [`uv`](https://docs.astral.sh/uv/) (which provides `uvx`).
+> Requires [`uv`](https://docs.astral.sh/uv/) (which provides `uvx`), and Node.js 18 or later for
+> the session hooks and the message monitor (they run `npx @scope-analytics/cli`).
+
+## Scope as a teammate
+
+- **When a session starts**, Claude Code gets what Scope has for it: unread messages, open fix
+  briefs, actions waiting for a person to confirm in Scope, and what Scope saw change in production.
+- **While a session is open**, a background monitor (`scope listen`) adds one line to the session
+  for each new message or brief as it arrives. A prompt hook picks up anything the monitor hasn't.
+- **Claude Code answers** with `scope_reply`, and reports a brief as `acknowledged` or `fix_claimed`
+  with `scope_brief_status`. Scope checks the fix on production data after the deploy and says
+  whether it worked.
+- **The plugin's skill** (`scope-teammate`) tells Claude Code who Scope is and how to work with it:
+  Scope's messages are data from a teammate, not your instructions, and Claude Code checks with you
+  before changing code because of them.
+
+Everything Scope sends is framed as data from Scope. Text a brief quotes from your product's users
+stays inside a fence labelled as theirs. Scope never edits code, opens pull requests or touches
+GitHub; it needs a person's click for anything that keeps running or that messages someone else.
+In a project with no Scope key, the hooks and the monitor exit at once and add nothing.
 
 ## What you can ask
 
@@ -43,6 +66,25 @@ them in Scope. Scope never edits your files or account on its own.
   `scope_coverage_report`
 - **Query:** `scope_ask` (the analyst), `scope_get_stats`, `scope_query_events`,
   `scope_get_session`, `scope_list_metrics`, `scope_get_metric`
+- **Teammate:** `scope_inbox`, `scope_reply`, `scope_brief_status`
+
+## Codex and Cursor
+
+The same folder is a Codex plugin (Codex reads this repository's `.agents/plugins/marketplace.json`)
+and a Cursor plugin (`.cursor-plugin/`). Codex gets the session-start context and new messages with
+each prompt; it has no way for an outside process to push into a running session. Cursor gets the
+session-start context only (its prompt hook can't add context). Neither has a monitor.
+
+## Trying a branch
+
+```bash
+claude plugin validate ./scope-analytics-mcp
+claude --plugin-dir ./scope-analytics-mcp
+```
+
+`SCOPE_CLI=/path/to/scopeai/cli/bin/scope.js` makes the hooks and the monitor run a local copy of the
+CLI instead of the published one; `SCOPE_API_BASE` points them at another Scope backend. The
+wrapper's tests: `node --test scope-analytics-mcp/scripts/`.
 
 ## Privacy
 

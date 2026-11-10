@@ -1,0 +1,20 @@
+{
+  "name": "scopeai",
+  "interface": {
+    "displayName": "Scope AI"
+  },
+  "plugins": [
+    {
+      "name": "scope-analytics-mcp",
+      "source": {
+        "source": "local",
+        "path": "./scope-analytics-mcp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

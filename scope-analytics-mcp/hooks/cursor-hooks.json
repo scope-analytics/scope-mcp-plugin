@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "command": "node ./scripts/scope.mjs hook session-start --format cursor",
+        "timeout": 30
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "scope-analytics-mcp",
+  "version": "0.2.0",
+  "description": "Scope, the AI analyst for AI products, as a teammate in your coding agent: set up, install and query Scope, and get its messages and fix briefs in your session. No key to paste.",
+  "author": {
+    "name": "Scope AI",
+    "email": "info@scopeai.dev"
+  },
+  "homepage": "https://scopeai.dev",
+  "repository": "https://github.com/scope-analytics/scope-mcp-plugin",
+  "license": "MIT",
+  "keywords": [
+    "analytics",
+    "observability",
+    "llm",
+    "ai-analytics",
+    "product-analytics",
+    "mcp"
+  ],
+  "hooks": "./hooks/cursor-hooks.json",
+  "mcpServers": "./.mcp.json"
+}

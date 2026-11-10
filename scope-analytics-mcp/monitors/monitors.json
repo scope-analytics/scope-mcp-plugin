@@ -1,0 +1,7 @@
+[
+  {
+    "name": "scope-messages",
+    "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/scope.mjs\" listen",
+    "description": "Messages and fix briefs from Scope, the project's analyst"
+  }
+]

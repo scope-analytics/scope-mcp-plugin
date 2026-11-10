@@ -1,0 +1,18 @@
+{
+  "name": "scopeai",
+  "owner": {
+    "name": "Scope AI",
+    "email": "info@scopeai.dev"
+  },
+  "metadata": {
+    "description": "Scope, the AI analyst for AI products, in your coding agent."
+  },
+  "plugins": [
+    {
+      "name": "scope-analytics-mcp",
+      "source": "scope-analytics-mcp",
+      "description": "Set up, install and query Scope, and get its messages and fix briefs in your session.",
+      "category": "Developer Tools"
+    }
+  ]
+}
