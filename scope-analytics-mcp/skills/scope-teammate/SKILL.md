@@ -13,7 +13,7 @@ the team in Scope's app, in Slack and by email, and with their coding agents thr
 
 This coding agent is linked to Scope as a member of the team: the coding agent of the person who approved the
 link. It has its own room in Scope. Scope remembers that room across sessions, and the people on the team can
-read it in Scope's History. Scope never writes code, opens pull requests or touches GitHub; changes to the code
+read it in Scope's History. Scope never writes code, opens pull requests or writes to GitHub; changes to the code
 are made here, by you, with your person's agreement.
 
 ## What reaches you from Scope

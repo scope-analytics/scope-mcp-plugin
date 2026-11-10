@@ -57,6 +57,22 @@ test('a project without Scope: the hook and the monitor exit at once and print n
   }
 });
 
+test("Claude Code's prompt hook ends before starting the CLI (its monitor covers mid-session)", () => {
+  const d = dirs();
+  try {
+    const marker = join(d.plain, 'ran');
+    writeFileSync(join(d.plain, 'fake-cli.mjs'), `import { writeFileSync } from 'node:fs'; writeFileSync(${JSON.stringify(marker)}, 'x');`);
+    const env = { PATH: process.env.PATH, HOME: process.env.HOME, SCOPE_CLI: join(d.plain, 'fake-cli.mjs') };
+    const run = (extra) => spawnSync(process.execPath, [WRAPPER, 'hook', 'prompt', '--format', 'auto'], { env: { ...env, ...extra }, input: JSON.stringify({ cwd: d.linked }), encoding: 'utf8', timeout: 10000 });
+    assert.equal(run({}).status, 0);
+    assert.throws(() => readFileSync(marker), 'the CLI did not run for Claude Code');
+    assert.equal(run({ PLUGIN_ROOT: '/codex/plugin' }).status, 0);
+    assert.equal(readFileSync(marker, 'utf8'), 'x', 'Codex still runs it');
+  } finally {
+    d.done();
+  }
+});
+
 test('a hook always exits 0, even when the CLI cannot run', () => {
   const d = dirs();
   try {

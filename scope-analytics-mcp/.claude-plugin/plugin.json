@@ -1,7 +1,7 @@
 {
   "name": "scope-analytics-mcp",
   "displayName": "Scope Analytics",
-  "version": "0.2.0",
+  "version": "0.1.10",
   "description": "Scope, the AI analyst for AI products, as a teammate in your coding agent: set up, install and query Scope, and get its messages and fix briefs in your session. No key to paste.",
   "author": {
     "name": "Scope AI",

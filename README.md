@@ -32,7 +32,7 @@ Code saves only to an env file git won't commit, and the plugin finds it there n
 - **When a session starts**, Claude Code gets what Scope has for it: unread messages, open fix
   briefs, actions waiting for a person to confirm in Scope, and what Scope saw change in production.
 - **While a session is open**, a background monitor (`scope listen`) adds one line to the session
-  for each new message or brief as it arrives. A prompt hook picks up anything the monitor hasn't.
+  for each new message or brief as it arrives.
 - **Claude Code answers** with `scope_reply`, and reports a brief as `acknowledged` or `fix_claimed`
   with `scope_brief_status`. Scope checks the fix on production data after the deploy and says
   whether it worked.
@@ -41,7 +41,7 @@ Code saves only to an env file git won't commit, and the plugin finds it there n
   before changing code because of them.
 
 Everything Scope sends is framed as data from Scope. Text a brief quotes from your product's users
-stays inside a fence labelled as theirs. Scope never edits code, opens pull requests or touches
+stays inside a fence labelled as theirs. Scope never edits code, opens pull requests or writes to
 GitHub; it needs a person's click for anything that keeps running or that messages someone else.
 In a project with no Scope key, the hooks and the monitor exit at once and add nothing.
 
@@ -74,6 +74,13 @@ The same folder is a Codex plugin (Codex reads this repository's `.agents/plugin
 and a Cursor plugin (`.cursor-plugin/`). Codex gets the session-start context and new messages with
 each prompt; it has no way for an outside process to push into a running session. Cursor gets the
 session-start context only (its prompt hook can't add context). Neither has a monitor.
+
+## Releasing
+
+The hooks and the monitor need `@scope-analytics/cli` 0.2.0 (the `inbox`, `listen` and `hook`
+commands) and the MCP tools `scope_inbox`, `scope_reply` and `scope_brief_status` (the next
+`scope-analytics-mcp`). Publish both first, then bump `version` in `.claude-plugin/plugin.json` and
+`.cursor-plugin/plugin.json`, then merge.
 
 ## Trying a branch
 

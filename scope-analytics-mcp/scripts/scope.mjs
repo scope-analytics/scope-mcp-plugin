@@ -75,6 +75,10 @@ export function agentFormat(env = process.env) {
 
 async function main(argv) {
   const isHook = argv[0] === 'hook';
+  // Claude Code's monitor brings what arrives mid-session; its prompt hook is there for Codex, which
+  // shares this hooks file, so in Claude Code it ends here without starting the CLI.
+  const format = argv[argv.indexOf('--format') + 1];
+  if (isHook && argv[1] === 'prompt' && format === 'auto' && agentFormat() === 'claude-code') return 0;
   const input = isHook ? await readHookInput() : {};
   const dir = projectDir(input);
   if (!dir) return 0;
