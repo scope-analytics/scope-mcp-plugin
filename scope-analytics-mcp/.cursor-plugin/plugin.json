@@ -18,5 +18,6 @@
     "mcp"
   ],
   "hooks": "./hooks/cursor-hooks.json",
-  "mcpServers": "./.mcp.json"
+  "mcpServers": "./.mcp.json",
+  "logo": "assets/logo.svg"
 }

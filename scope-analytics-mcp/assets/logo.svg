@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Background with rounded corners -->
+  <rect width="100" height="100" rx="16" fill="#002C54"/>
+  
+  <!-- BarChart3 icon from Lucide - centered and scaled for favicon -->
+  <g transform="translate(50, 50)">
+    <!-- Scale and center the 24x24 icon to fit nicely -->
+    <g transform="scale(2.5) translate(-12, -12)">
+      <!-- Lucide BarChart3 paths -->
+      <rect x="3" y="10" width="4" height="11" fill="#FFFFFF" rx="1"/>
+      <rect x="10" y="3" width="4" height="18" fill="#FFFFFF" rx="1"/>
+      <rect x="17" y="6" width="4" height="15" fill="#FFFFFF" rx="1"/>
+    </g>
+  </g>
+</svg>

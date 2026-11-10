@@ -12,7 +12,8 @@
       "name": "scope-analytics-mcp",
       "source": "scope-analytics-mcp",
       "description": "Set up, install and query Scope, and get its messages and fix briefs in your session.",
-      "category": "Developer Tools"
+      "category": "Developer Tools",
+      "logo": "scope-analytics-mcp/assets/logo.svg"
     }
   ]
 }
