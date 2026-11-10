@@ -22,7 +22,10 @@ found in production, its evidence, the likely place in the code, and how Scope w
 **No key to paste.** The first time Claude Code uses Scope, it links your project: Scope opens in
 your browser, you sign in (or sign up), type the code Claude Code shows, pick or create the
 project, and approve. The link gets its own key — revocable in Scope's Setup → Keys — which Claude
-Code saves only to an env file git won't commit, and the plugin finds it there next time.
+Code saves only to an env file git won't commit (never over a key already there), and the plugin
+finds it there next time. Claude Code's own key as a team member is kept apart, in
+`~/.config/scope/agent-keys.json` on your computer: removing the agent in Scope never stops your
+app's events.
 
 > Requires [`uv`](https://docs.astral.sh/uv/) (which provides `uvx`), and Node.js 18 or later for
 > the session hooks and the message monitor (they run `npx @scope-analytics/cli`).

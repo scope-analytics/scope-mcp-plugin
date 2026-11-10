@@ -7,7 +7,7 @@ import { join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { agentFormat, projectDir } from './scope.mjs';
+import { agentFolders, agentFormat, projectDir } from './scope.mjs';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const WRAPPER = join(here, 'scope.mjs');
@@ -34,6 +34,25 @@ test('the project folder is the first candidate that has a Scope key', () => {
     assert.equal(projectDir({ cwd: d.plain }, {}, d.plain), null, 'an empty key line is no key');
   } finally {
     d.done();
+  }
+});
+
+test("a folder linked only through the agent's own key (no app key in its env files) counts as linked", () => {
+  const d = dirs();
+  const cfg = mkdtempSync(join(tmpdir(), 'scope-plugin-cfg-'));
+  try {
+    const env = { SCOPE_CONFIG_DIR: cfg };
+    assert.equal(projectDir({ cwd: d.plain }, env, d.plain), null);
+    writeFileSync(join(cfg, 'agent-keys.json'), JSON.stringify({ version: 1, projects: { 'p1@https://api.scopeai.dev': { project_id: 'p1', api_base: 'https://api.scopeai.dev', agent_key: 'sk_a', folders: [d.plain] } } }));
+    assert.equal(projectDir({ cwd: d.plain }, env, d.plain), d.plain);
+    assert.deepEqual(agentFolders(env), [d.plain]);
+    // revoked: no longer counts
+    writeFileSync(join(cfg, 'agent-keys.json'), JSON.stringify({ version: 1, projects: { x: { project_id: 'p1', folders: [d.plain], revoked_at: '2026-11-10T00:00:00Z' } } }));
+    assert.equal(projectDir({ cwd: d.plain }, env, d.plain), null);
+    assert.equal(projectDir({ cwd: d.plain }, { ...env, SCOPE_AGENT_KEY: 'sk_a' }, d.plain), d.plain);
+  } finally {
+    d.done();
+    rmSync(cfg, { recursive: true, force: true });
   }
 });
 

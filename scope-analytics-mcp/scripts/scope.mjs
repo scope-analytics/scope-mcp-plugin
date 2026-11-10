@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Runs Scope's CLI (@scope-analytics/cli) for this plugin's hooks and monitor, in the project's
-// folder, and only for a project linked to Scope: with no Scope key there, it exits at once and
-// prints nothing, so a project without Scope never pays for the plugin.
+// folder, and only for a project linked to Scope: with no Scope key there (the app's SCOPE_API_KEY in
+// an env file, or this coding agent's own key kept for that folder in ~/.config/scope), it exits at
+// once and prints nothing, so a project without Scope never pays for the plugin.
 //
 //   node scope.mjs hook session-start --format auto|claude-code|codex|cursor
 //   node scope.mjs hook prompt --format auto
@@ -10,8 +11,9 @@
 // SCOPE_CLI=/path/to/cli/bin/scope.js runs a local copy of the CLI instead of the published one
 // (for trying a branch). A hook never fails the coding agent's session: it always exits 0.
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, readFileSync, realpathSync } from 'node:fs';
+import { homedir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 // An exact version: npx reuses a cached copy that satisfies a range without asking the registry, and
@@ -47,7 +49,37 @@ function readHookInput(quietMs = 300) {
   });
 }
 
-function hasKey(dir) {
+const real = (p) => {
+  try {
+    return realpathSync(resolve(p));
+  } catch {
+    return resolve(p);
+  }
+};
+
+// Folders this computer keeps a coding-agent key for (the CLI's and MCP's agent-keys.json, C2.2).
+export function agentFolders(env = process.env) {
+  const dir = env.SCOPE_CONFIG_DIR || join(env.XDG_CONFIG_HOME || join(homedir(), '.config'), 'scope');
+  try {
+    const store = JSON.parse(readFileSync(join(dir, 'agent-keys.json'), 'utf8'));
+    return Object.values(store.projects || {})
+      .filter((e) => e && e.agent_key && !e.revoked_at)
+      .flatMap((e) => e.folders || []);
+  } catch {
+    return [];
+  }
+}
+
+function within(folder, dir) {
+  const f = real(folder);
+  for (let d = real(dir); ; d = dirname(d)) {
+    if (d === f) return true;
+    if (dirname(d) === d) return false;
+  }
+}
+
+function hasKey(dir, folders) {
+  if (folders.some((f) => within(f, dir))) return true;
   for (const name of ENV_FILES) {
     try {
       if (/^\s*(?:export\s+)?SCOPE_API_KEY\s*=\s*\S/m.test(readFileSync(join(dir, name), 'utf8'))) return true;
@@ -64,8 +96,9 @@ export function projectDir(input, env = process.env, cwd = process.cwd()) {
   const candidates = [input.cwd, env.CLAUDE_PROJECT_DIR, env.CURSOR_PROJECT_DIR, ...(input.workspace_roots || []), cwd]
     .filter((d) => typeof d === 'string' && d && existsSync(d));
   const unique = [...new Set(candidates)];
-  if (env.SCOPE_API_KEY && env.SCOPE_API_KEY.trim()) return unique[0] || cwd;
-  return unique.find(hasKey) || null;
+  if ((env.SCOPE_API_KEY && env.SCOPE_API_KEY.trim()) || (env.SCOPE_AGENT_KEY && env.SCOPE_AGENT_KEY.trim())) return unique[0] || cwd;
+  const folders = agentFolders(env);
+  return unique.find((d) => hasKey(d, folders)) || null;
 }
 
 // Which agent runs this hook: Cursor and Codex name their plugin roots their own way.
