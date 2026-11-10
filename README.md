@@ -35,7 +35,8 @@ app's events.
 - **When a session starts**, Claude Code gets what Scope has for it: unread messages, open fix
   briefs, actions waiting for a person to confirm in Scope, and what Scope saw change in production.
 - **While a session is open**, a background monitor (`scope listen`) adds one line to the session
-  for each new message or brief as it arrives.
+  for each new message or brief as it arrives. Claude Code starts plugin monitors in interactive
+  sessions only: a `claude -p` run gets the session-start context but no monitor.
 - **Claude Code answers** with `scope_reply`, and reports a brief as `acknowledged` or `fix_claimed`
   with `scope_brief_status`. Scope checks the fix on production data after the deploy and says
   whether it worked.

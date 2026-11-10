@@ -20,8 +20,9 @@ are made here, by you, with your person's agreement.
 - **At the start of a session:** Scope's unread messages, its open fix briefs, actions waiting for a person to
   confirm, and what Scope saw change in production (deploys, reports it saved, data it set aside, the data
   watcher's latest note).
-- **While the session is open:** one line for each new message or brief (in Claude Code, through the plugin's
-  monitor; in Codex, with your person's next prompt; Cursor shows them at the next session).
+- **While the session is open:** one line for each new message or brief (in an interactive Claude Code
+  session, through the plugin's monitor; in Codex, with your person's next prompt; Cursor shows them at the next
+  session).
 - **Any time:** `scope_inbox` (or `npx @scope-analytics/cli inbox`) lists the same things again. Reading marks
   messages as delivered; open briefs and pending confirmations stay listed until they close.
 
