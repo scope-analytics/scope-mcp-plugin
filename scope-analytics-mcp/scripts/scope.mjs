@@ -14,7 +14,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const CLI_PACKAGE = '@scope-analytics/cli@^0.2.0';
+// An exact version: npx reuses a cached copy that satisfies a range without asking the registry, and
+// cmd.exe drops a `^`. Bump it with each plugin release that needs a newer CLI.
+const CLI_PACKAGE = '@scope-analytics/cli@0.2.0';
 const ENV_FILES = ['.env.local', '.env'];
 
 // Hook input on stdin (JSON), when there is some: Claude Code and Codex send `cwd`, Cursor sends
@@ -88,10 +90,13 @@ async function main(argv) {
     ? [process.execPath, [local, ...args]]
     : [process.platform === 'win32' ? 'npx.cmd' : 'npx', ['-y', CLI_PACKAGE, ...args]];
   const code = await new Promise((resolve) => {
-    const child = spawn(cmd, cmdArgs, { cwd: dir, stdio: ['ignore', 'inherit', 'inherit'], shell: process.platform === 'win32' && !local });
+    // SCOPE_WATCH_PID: `scope listen` stops once this wrapper is gone, even if a signal never reaches
+    // it (a SIGKILL, or a Windows shell between the two)
+    const env = { ...process.env, SCOPE_WATCH_PID: String(process.pid) };
+    const child = spawn(cmd, cmdArgs, { cwd: dir, env, stdio: ['ignore', 'inherit', 'inherit'], shell: process.platform === 'win32' && !local });
     child.on('error', () => resolve(isHook ? 0 : 1));
     child.on('exit', (c) => resolve(c ?? 0));
-    for (const sig of ['SIGTERM', 'SIGINT']) process.once(sig, () => child.kill(sig));
+    for (const sig of ['SIGTERM', 'SIGINT', 'SIGHUP']) process.once(sig, () => child.kill(sig));
   });
   return isHook ? 0 : code;
 }

@@ -73,6 +73,23 @@ test("Claude Code's prompt hook ends before starting the CLI (its monitor covers
   }
 });
 
+test('the CLI is pinned to an exact version and learns the wrapper\'s pid', () => {
+  const src = readFileSync(WRAPPER, 'utf8');
+  assert.match(src, /const CLI_PACKAGE = '@scope-analytics\/cli@\d+\.\d+\.\d+';/);
+  const d = dirs();
+  try {
+    const out = join(d.plain, 'env.json');
+    writeFileSync(join(d.plain, 'fake-cli.mjs'), `import { writeFileSync } from 'node:fs'; writeFileSync(${JSON.stringify(out)}, JSON.stringify({ pid: process.env.SCOPE_WATCH_PID, ppid: process.ppid }));`);
+    const env = { PATH: process.env.PATH, HOME: process.env.HOME, SCOPE_CLI: join(d.plain, 'fake-cli.mjs') };
+    const r = spawnSync(process.execPath, [WRAPPER, 'listen'], { cwd: d.linked, env, encoding: 'utf8', timeout: 10000 });
+    assert.equal(r.status, 0);
+    const seen = JSON.parse(readFileSync(out, 'utf8'));
+    assert.equal(seen.pid, String(seen.ppid), 'SCOPE_WATCH_PID is the wrapper');
+  } finally {
+    d.done();
+  }
+});
+
 test('a hook always exits 0, even when the CLI cannot run', () => {
   const d = dirs();
   try {

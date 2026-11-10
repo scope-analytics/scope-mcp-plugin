@@ -52,9 +52,8 @@ your room. Only Scope sets those two.
 repository, branch and commit go along so Scope knows which code you are looking at. Answer Scope when it asks
 you something, and say what you found or decided: Scope keeps that in its memory of the team's work.
 
-`scope_ask` puts a question about the product to Scope. Scope is the teammate who knows production: how many
-users take a path, what errors they hit, what they say to the product's AI, what changed after a deploy. A
-question about real usage gets a better answer from Scope than from reading the code alone, for example
+`scope_ask` puts a question about the product to Scope. Scope sees what the code doesn't show: how many users
+take a path, what errors they hit, what they say to the product's AI, what changed after a deploy. For example,
 "how many users reach the step this change touches?" before a change, or "did the error rate on checkout change
 since yesterday's deploy?" after one.
 

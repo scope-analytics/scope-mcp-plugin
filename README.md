@@ -77,10 +77,11 @@ session-start context only (its prompt hook can't add context). Neither has a mo
 
 ## Releasing
 
-The hooks and the monitor need `@scope-analytics/cli` 0.2.0 (the `inbox`, `listen` and `hook`
-commands) and the MCP tools `scope_inbox`, `scope_reply` and `scope_brief_status` (the next
-`scope-analytics-mcp`). Publish both first, then bump `version` in `.claude-plugin/plugin.json` and
-`.cursor-plugin/plugin.json`, then merge.
+The hooks and the monitor run `@scope-analytics/cli` at the exact version pinned in
+`scripts/scope.mjs` (0.2.0: the `inbox`, `listen` and `hook` commands), and the skill names the MCP
+tools `scope_inbox`, `scope_reply` and `scope_brief_status` (the next `scope-analytics-mcp`). Publish
+both first, then bump `version` in `.claude-plugin/plugin.json` and `.cursor-plugin/plugin.json`,
+then merge.
 
 ## Trying a branch
 
